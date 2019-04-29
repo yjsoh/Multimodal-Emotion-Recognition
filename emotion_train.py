@@ -6,6 +6,7 @@ import tensorflow as tf
 import data_provider
 import losses
 import models
+import yaml
 
 from tensorflow.python.platform import tf_logging as logging
 
@@ -88,4 +89,13 @@ def train(data_folder):
 
 
 if __name__ == '__main__':
+    with open('mer.yml', 'r') as f:
+        config = yaml.safe_load(f)
+        for k,v in config.items():
+            if isinstance(v, str):
+                if len(v) == 0:
+                    v="''"
+                else:
+                    v="'%s'" % (v)
+            exec("FLAGS.%s=%s" % (k,v))
     train(FLAGS.dataset_dir)
